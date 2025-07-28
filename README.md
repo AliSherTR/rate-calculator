@@ -19,6 +19,7 @@ A sleek and dynamic rate calculation tool designed to estimate monthly billing r
 - ShadCN UI components
 - `pdfmake` for downloadable PDF receipts
 - `exchangerate-api.com` for live currency data
+- supabase (database-backend)
 
 ## 📦 Setup Instructions
 
