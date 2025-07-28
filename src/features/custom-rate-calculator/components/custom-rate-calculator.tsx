@@ -9,10 +9,12 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useCustomRateData } from "../hooks/useCustomRateData";
+import { Download } from "lucide-react";
+import { generateCustomRateReceipt } from "@/lib/generate-custom-receipt";
 
 export default function CustomRateCalculator() {
   const { data, isLoading, error } = useCustomRateData();
-  console.log(data);
+
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [selectedSeniority, setSelectedSeniority] = useState<string | null>(
@@ -183,13 +185,39 @@ export default function CustomRateCalculator() {
         </div>
 
         {/* Final Rate Display */}
-        <div className="mt-60 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-right border border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-            Estimated Monthly Rate
-          </h3>
-          <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-2">
-            AED {getFinalRate()}
-          </p>
+        <div className="mt-60 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-right border border-gray-200 dark:border-gray-700 flex justify-between items-center">
+          <span id="regionVal" hidden>
+            {selectedRegion}
+          </span>
+          <span id="roleVal" hidden>
+            {selectedRole}
+          </span>
+          <span id="seniorityVal" hidden>
+            {selectedSeniority}
+          </span>
+          <span id="rateVal" hidden>
+            {getFinalRate()}
+          </span>
+
+          <div>
+            <button
+              className=" py-3 px-4 bg-blue-900 flex gap-2 items-center text-white rounded-lg text-sm"
+              onClick={() => generateCustomRateReceipt()}
+            >
+              <Download className=" text-sm" size={18} />
+              Download Receipt
+            </button>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+              Estimated Monthly Rate
+            </h3>
+
+            <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-2">
+              AED {getFinalRate()}
+            </p>
+          </div>
         </div>
       </CardContent>
     </Card>
