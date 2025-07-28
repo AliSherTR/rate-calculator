@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💼 Rate Card Calculator
 
-## Getting Started
+A sleek and dynamic rate calculation tool designed to estimate monthly billing rates based on multiple factors like region, role, seniority, and workload. Users can also convert the result into other currencies and download professional receipts in PDF format.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Role-based and region-specific rate calculation.
+- SWAT Team rate calculator with workload and duration discounts.
+- Real-time currency conversion (AED → USD, EUR, GBP, PKR).
+- Styled PDF receipt download with all calculation details.
+- Dark mode and responsive UI support.
+- Built-in theme and custom styling for polished experience.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- ShadCN UI components
+- `pdfmake` for downloadable PDF receipts
+- `exchangerate-api.com` for live currency data
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Setup Instructions
 
-## Learn More
+1. **Clone the repo:**
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   git clone https://github.com/AliSherTR/rate-calculator.git
+   cd rate-calculator
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Install Dependencies:**
 
-## Deploy on Vercel
+   ```bash
+    npm install
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Create the Enviroment Variables:**
+
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=
+
+   ```
+
+4. **Run the development server:**
+
+   ```bash
+   npm run dev
+
+   ```
+
+5. **Visit:**
+
+   - Open http://localhost:3000
+
+🙌 Credits
+
+Designed and Devloped by [Ali Sher Khan](https://www.linkedin.com/in/ali-sher-khan-tahirkheli-26374925b/)
