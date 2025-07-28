@@ -21,10 +21,13 @@ export default function CustomRateCalculator() {
     null
   );
 
+  const [selectedCurrency, setSelectedCurrency] = useState("AED");
+  const [exchangeRate, setExchangeRate] = useState(1); // default: AED to AED = 1
+
   // Calculate the final rate
   const getFinalRate = () => {
     if (!data || !selectedRegion || !selectedRole || !selectedSeniority)
-      return 0;
+      return "0.00";
 
     const region = data.regions.find((r) => r.name === selectedRegion);
     const role = data.roles.find((r) => r.name === selectedRole);
@@ -32,7 +35,7 @@ export default function CustomRateCalculator() {
       (s) => s.name === selectedSeniority
     );
 
-    if (!region || !role || !seniority) return 0;
+    if (!region || !role || !seniority) return "0.00";
 
     const finalRate = role.base_rate * region.multiplier * seniority.multiplier;
     return finalRate.toFixed(2);
@@ -44,6 +47,27 @@ export default function CustomRateCalculator() {
     setSelectedRole(data.roles[0]?.name || null);
     setSelectedSeniority(data.seniority_levels[0]?.name || null);
   }
+
+  const fetchExchangeRate = async (targetCurrency: string) => {
+    try {
+      const res = await fetch("https://api.exchangerate-api.com/v4/latest/AED");
+      const json = await res.json();
+      const rate = json.rates[targetCurrency];
+      if (rate) {
+        setExchangeRate(rate);
+      } else {
+        setExchangeRate(1);
+      }
+    } catch (error) {
+      console.error("Exchange rate fetch failed", error);
+      setExchangeRate(1); // fallback
+    }
+  };
+
+  const handleCurrencyChange = (currency: string) => {
+    setSelectedCurrency(currency);
+    fetchExchangeRate(currency);
+  };
 
   // Handle loading and error states
   if (isLoading) {
@@ -184,39 +208,81 @@ export default function CustomRateCalculator() {
           </div>
         </div>
 
-        {/* Final Rate Display */}
-        <div className="mt-60 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-right border border-gray-200 dark:border-gray-700 flex justify-between items-center">
-          <span id="regionVal" hidden>
-            {selectedRegion}
-          </span>
-          <span id="roleVal" hidden>
-            {selectedRole}
-          </span>
-          <span id="seniorityVal" hidden>
-            {selectedSeniority}
-          </span>
-          <span id="rateVal" hidden>
-            {getFinalRate()}
-          </span>
-
-          <div>
+        <div className="mt-60 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+          <div className="flex justify-between items-start flex-col md:flex-row md:items-center gap-4">
             <button
-              className=" py-3 px-4 bg-blue-900 flex gap-2 items-center text-white rounded-lg text-sm"
+              className="mt-4 md:mt-0 py-3 px-4 bg-blue-900 flex gap-2 items-center text-white rounded-lg text-sm"
               onClick={() => generateCustomRateReceipt()}
             >
-              <Download className=" text-sm" size={18} />
+              <Download className="text-sm" size={18} />
               Download Receipt
             </button>
-          </div>
+            <div className=" flex gap-10 items-center  grow justify-end">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Convert to:
+                </label>
+                <Select
+                  value={selectedCurrency}
+                  onValueChange={handleCurrencyChange}
+                >
+                  <SelectTrigger className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-all duration-200 w-full">
+                    <SelectValue placeholder="Select currency" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600">
+                    <SelectItem
+                      value="AED"
+                      className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      AED (Base)
+                    </SelectItem>
+                    <SelectItem
+                      value="USD"
+                      className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      USD
+                    </SelectItem>
+                    <SelectItem
+                      value="EUR"
+                      className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      EUR
+                    </SelectItem>
+                    <SelectItem
+                      value="GBP"
+                      className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      GBP
+                    </SelectItem>
+                    <SelectItem
+                      value="PKR"
+                      className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      PKR
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-          <div>
-            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-              Estimated Monthly Rate
-            </h3>
-
-            <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-2">
-              AED {getFinalRate()}
-            </p>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                  Estimated Monthly Rate
+                </h3>
+                <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-1">
+                  AED {getFinalRate()}
+                </p>
+                {selectedCurrency !== "AED" && (
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    ≈ {selectedCurrency}{" "}
+                    {(parseFloat(getFinalRate()) * exchangeRate).toFixed(2)}{" "}
+                    <br />
+                    <span className="text-xs">
+                      1 AED = {exchangeRate.toFixed(4)} {selectedCurrency}
+                    </span>
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </CardContent>
