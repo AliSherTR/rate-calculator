@@ -210,6 +210,18 @@ export default function CustomRateCalculator() {
 
         <div className="mt-60 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
           <div className="flex justify-between items-start flex-col md:flex-row md:items-center gap-4">
+            <span id="regionVal" hidden>
+              {selectedRegion}
+            </span>
+            <span id="roleVal" hidden>
+              {selectedRole}
+            </span>
+            <span id="seniorityVal" hidden>
+              {selectedSeniority}
+            </span>
+            <span id="rateVal" hidden>
+              {getFinalRate()}
+            </span>
             <button
               className="mt-4 md:mt-0 py-3 px-4 bg-blue-900 flex gap-2 items-center text-white rounded-lg text-sm"
               onClick={() => generateCustomRateReceipt()}
